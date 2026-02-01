@@ -57,9 +57,7 @@ export default function AdminLogin() {
         />
         
         <button type="submit" className={styles.button}>Entrar</button>
-        <p style={{fontSize: '0.8rem', marginTop: '1rem', color: '#666'}}>
-            (Use: admin / da-mata)
-        </p>
+
       </form>
     </div>
   );
