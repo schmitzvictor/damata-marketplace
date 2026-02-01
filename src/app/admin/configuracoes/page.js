@@ -105,16 +105,7 @@ export default function AdminSettings() {
                         style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #ccc' }}
                     />
                 </div>
-                <div>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Facebook (URL)</label>
-                    <input 
-                        type="text" 
-                        name="facebook"
-                        value={formData.facebook}
-                        onChange={handleChange}
-                        style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #ccc' }}
-                    />
-                </div>
+
             </section>
 
             <button 
