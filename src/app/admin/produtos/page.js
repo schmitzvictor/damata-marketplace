@@ -60,15 +60,7 @@ export default function AdminProducts() {
                 <td>R$ {product.price.toFixed(2).replace('.', ',')}</td>
                 <td>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                        <button 
-                            onClick={() => updateProduct(product.id, { stock: Math.max(0, (product.stock || 0) - 1) })}
-                            style={{ width: '24px', height: '24px', cursor: 'pointer' }}
-                        >-</button>
-                        <span>{product.stock || 0}</span>
-                        <button 
-                            onClick={() => updateProduct(product.id, { stock: (product.stock || 0) + 1 })}
-                            style={{ width: '24px', height: '24px', cursor: 'pointer' }}
-                        >+</button>
+                        <span>{product.stock} un.</span>
                     </div>
                 </td>
                 <td>{product.category}</td>

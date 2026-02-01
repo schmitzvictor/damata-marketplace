@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useSales } from "@/context/SalesContext";
 import styles from "../page.module.css"; 
 
@@ -20,6 +21,7 @@ export default function AdminSales() {
               <th>Itens</th>
               <th>Total</th>
               <th>Status</th>
+              <th>Ações</th>
             </tr>
           </thead>
           <tbody>
@@ -42,6 +44,11 @@ export default function AdminSales() {
                     >
                         {order.status}
                     </span>
+                </td>
+                <td>
+                    <Link href={`/admin/vendas/${order.id}`} style={{ textDecoration: 'none', color: '#1565C0', fontWeight: 'bold' }}>
+                        Ver Detalhes
+                    </Link>
                 </td>
               </tr>
             ))}

@@ -9,12 +9,13 @@ export default function AdminLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  useEffect(() => {
-    const token = localStorage.getItem("adminToken");
-    if (!token && pathname !== "/admin/login") {
-      router.push("/admin/login");
-    }
-  }, [router, pathname]);
+  /* Middleware handles auth now */
+
+  const handleLogout = async () => {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      router.push('/admin/login');
+      router.refresh();
+  };
 
   if (pathname === "/admin/login") {
       return children;
@@ -30,6 +31,13 @@ export default function AdminLayout({ children }) {
           <Link href="/admin/blog" className={styles.navLink}>📝 Blog</Link>
           <Link href="/admin/vendas" className={styles.navLink}>💰 Vendas</Link>
           <Link href="/admin/configuracoes" className={styles.navLink}>⚙️ Configurações</Link>
+          <button 
+                onClick={handleLogout} 
+                className={styles.navLink} 
+                style={{background: 'none', border: 'none', textAlign: 'left', cursor: 'pointer', fontSize: '1rem', color: '#ff5252', marginTop: 'auto'}}
+            >
+                🚪 Sair
+            </button>
           <div className={styles.divider}></div>
           <Link href="/" className={styles.navLink}>🏠 Voltar ao Site</Link>
         </nav>

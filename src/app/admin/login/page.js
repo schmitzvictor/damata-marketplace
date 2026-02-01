@@ -10,13 +10,28 @@ export default function AdminLogin() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    if (username === "admin" && password === "da-mata") {
-      localStorage.setItem("adminToken", "true");
-      router.push("/admin");
-    } else {
-      setError("Credenciais inválidas");
+    setError("");
+    
+    try {
+        const res = await fetch('/api/auth/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+        });
+
+        const data = await res.json();
+
+        if (res.ok && data.success) {
+            // Cookie is set by server automatically
+            router.push("/admin");
+            router.refresh(); // Refresh to ensure middleware catches the new cookie state if prefetching
+        } else {
+            setError(data.error || "Login falhou");
+        }
+    } catch (err) {
+        setError("Erro de conexão");
     }
   };
 

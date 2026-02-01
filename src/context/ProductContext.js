@@ -1,43 +1,73 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect } from "react";
-import { products as initialProducts } from "@/lib/products";
 
 const ProductContext = createContext();
 
 export function ProductProvider({ children }) {
-  const [products, setProducts] = useState(initialProducts);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Load from LocalStorage on mount
-  useEffect(() => {
-    const savedProducts = localStorage.getItem("daMataProducts");
-    if (savedProducts) {
-      try {
-        setProducts(JSON.parse(savedProducts));
-      } catch (e) {
-        console.error("Failed to parse products", e);
-      }
+  const fetchProducts = async () => {
+    try {
+        const res = await fetch('/api/products');
+        if (res.ok) {
+            const data = await res.json();
+            setProducts(data);
+        }
+    } catch (err) {
+        console.error("Failed to load products", err);
+    } finally {
+        setLoading(false);
     }
+  };
+
+  useEffect(() => {
+    fetchProducts();
   }, []);
 
-  // Save to LocalStorage on change
-  useEffect(() => {
-    localStorage.setItem("daMataProducts", JSON.stringify(products));
-  }, [products]);
-
-  const addProduct = (product) => {
-    // Generate new ID
-    const newId = Math.max(...products.map(p => p.id), 0) + 1;
-    const newProduct = { ...product, id: newId };
-    setProducts(prev => [...prev, newProduct]);
+  const addProduct = async (product) => {
+    // Optimistic UI or wait? Let's wait for simplicity
+    try {
+        const res = await fetch('/api/products', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(product)
+        });
+        if (res.ok) {
+            const newProduct = await res.json();
+            setProducts(prev => [newProduct, ...prev]);
+        }
+    } catch (e) {
+        console.error("Add failed", e);
+    }
   };
 
-  const updateProduct = (id, updatedData) => {
-    setProducts(prev => prev.map(p => p.id === id ? { ...p, ...updatedData } : p));
+  const updateProduct = async (id, updatedData) => {
+    try {
+        const res = await fetch(`/api/products/${id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(updatedData)
+        });
+        if (res.ok) {
+            const updated = await res.json();
+            setProducts(prev => prev.map(p => p.id === id ? updated : p));
+        }
+    } catch (e) {
+        console.error("Update failed", e);
+    }
   };
 
-  const deleteProduct = (id) => {
-    setProducts(prev => prev.filter(p => p.id !== id));
+  const deleteProduct = async (id) => {
+    try {
+        const res = await fetch(`/api/products/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+            setProducts(prev => prev.filter(p => p.id !== id));
+        }
+    } catch (e) {
+        console.error("Delete failed", e);
+    }
   };
 
   const getFeaturedProducts = () => products.filter(p => p.featured);
@@ -50,7 +80,8 @@ export function ProductProvider({ children }) {
       updateProduct, 
       deleteProduct,
       getFeaturedProducts,
-      getProductById
+      getProductById,
+      loading
     }}>
       {children}
     </ProductContext.Provider>

@@ -5,35 +5,36 @@ import { createContext, useContext, useState, useEffect } from "react";
 const ContentContext = createContext();
 
 export function ContentProvider({ children }) {
-  const [content, setContent] = useState({
-    aboutUsTitle: "Quem Somos Nós",
-    aboutUsText: "A Da Mata Artesanal nasceu do desejo de conectar moda e natureza. Nossas peças são criações únicas, inspiradas na biodiversidade e produzidas com respeito ao meio ambiente. Cada detalhe é pensado para trazer o conforto da floresta para o seu dia a dia.",
-    socials: {
-        instagram: "https://instagram.com/damata",
-        facebook: "https://facebook.com/damata",
-    },
-    whatsapp: "5548999999999"
-  });
+  const [content, setContent] = useState({});
 
-  // Load from LocalStorage on mount
+  const fetchContent = async () => {
+    try {
+        const res = await fetch('/api/settings');
+        if (res.ok) {
+            const data = await res.json();
+            // Data is { aboutUsTitle: "...", ... }
+            setContent(data);
+        }
+    } catch (e) { console.error(e); }
+  };
+
   useEffect(() => {
-    const savedContent = localStorage.getItem("daMataContent");
-    if (savedContent) {
-      try {
-        setContent(JSON.parse(savedContent));
-      } catch (e) {
-        console.error("Failed to parse content", e);
-      }
-    }
+      fetchContent();
   }, []);
 
-  // Save to LocalStorage on change
-  useEffect(() => {
-    localStorage.setItem("daMataContent", JSON.stringify(content));
-  }, [content]);
-
-  const updateContent = (newContent) => {
-    setContent(prev => ({ ...prev, ...newContent }));
+  const updateContent = async (newContent) => {
+    try {
+        const res = await fetch('/api/settings', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(newContent)
+        });
+        if (res.ok) {
+            setContent(prev => ({ ...prev, ...newContent }));
+        }
+    } catch (e) {
+        console.error("Update content failed", e);
+    }
   };
 
   return (

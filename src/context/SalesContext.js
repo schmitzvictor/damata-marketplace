@@ -4,41 +4,37 @@ import { createContext, useContext, useState, useEffect } from "react";
 
 const SalesContext = createContext();
 
-const initialOrders = [
-    { id: 101, date: "2024-03-10", customer: "João Silva", total: 299.80, status: "Pago", items: 2 },
-    { id: 102, date: "2024-03-09", customer: "Maria Souza", total: 149.90, status: "Enviado", items: 1 },
-    { id: 103, date: "2024-03-08", customer: "Pedro Santos", total: 450.00, status: "Entregue", items: 3 },
-];
-
 export function SalesProvider({ children }) {
-  const [orders, setOrders] = useState(initialOrders);
+  const [orders, setOrders] = useState([]);
 
-  // Load from LocalStorage on mount
-  useEffect(() => {
-    const savedOrders = localStorage.getItem("daMataOrders");
-    if (savedOrders) {
+  const fetchOrders = async () => {
       try {
-        setOrders(JSON.parse(savedOrders));
-      } catch (e) {
-        console.error("Failed to parse orders", e);
-      }
-    }
+          const res = await fetch('/api/orders');
+          if (res.ok) {
+              const data = await res.json();
+              setOrders(data);
+          }
+      } catch (e) { console.error(e); }
+  };
+
+  useEffect(() => {
+      fetchOrders();
   }, []);
 
-  // Save to LocalStorage on change
-  useEffect(() => {
-    localStorage.setItem("daMataOrders", JSON.stringify(orders));
-  }, [orders]);
-
-  const addOrder = (orderData) => {
-    const newId = Math.max(...orders.map(o => o.id), 100) + 1;
-    const newOrder = { 
-        ...orderData, 
-        id: newId, 
-        date: new Date().toISOString().split('T')[0],
-        status: "Pago" // Auto-set to paid for mock
-    };
-    setOrders(prev => [newOrder, ...prev]);
+  const addOrder = async (orderData) => {
+    try {
+        const res = await fetch('/api/orders', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(orderData)
+        });
+        if (res.ok) {
+            const newOrder = await res.json();
+            setOrders(prev => [newOrder, ...prev]);
+        }
+    } catch (e) {
+        console.error("Add order failed", e);
+    }
   };
 
   return (

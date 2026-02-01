@@ -5,6 +5,7 @@ import { ProductProvider } from "@/context/ProductContext";
 import { BlogProvider } from "@/context/BlogContext";
 import { ContentProvider } from "@/context/ContentContext";
 import { SalesProvider } from "@/context/SalesContext";
+import { ToastProvider } from "@/context/ToastContext";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 const roboto = Roboto({
@@ -24,16 +25,18 @@ export default function RootLayout({ children }) {
     <html lang="pt-BR">
       <body className={roboto.variable}>
         <ContentProvider>
-            <BlogProvider>
-                <SalesProvider>
-                    <ProductProvider>
-                        <CartProvider>
-                            {children}
-                            <WhatsAppButton />
-                        </CartProvider>
-                    </ProductProvider>
-                </SalesProvider>
-            </BlogProvider>
+            <ToastProvider>
+                <BlogProvider>
+                    <SalesProvider>
+                        <ProductProvider>
+                            <CartProvider>
+                                {children}
+                                <WhatsAppButton />
+                            </CartProvider>
+                        </ProductProvider>
+                    </SalesProvider>
+                </BlogProvider>
+            </ToastProvider>
         </ContentProvider>
       </body>
     </html>

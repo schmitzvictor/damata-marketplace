@@ -19,7 +19,9 @@ export default function Marketplace() {
     return allProducts
       .filter(product => {
         const matchPrice = product.price <= maxPrice;
-        const matchSize = selectedSize ? product.size === selectedSize : true;
+        const matchSize = selectedSize 
+            ? product.variants?.some(v => v.size === selectedSize && v.stock > 0) 
+            : true;
         return matchPrice && matchSize;
       })
       .sort((a, b) => {

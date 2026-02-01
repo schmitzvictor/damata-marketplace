@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import { useProducts } from "@/context/ProductContext";
 import { useCart } from "@/context/CartContext";
+import { useToast } from "@/context/ToastContext";
 import styles from "./page.module.css";
 import { notFound } from "next/navigation";
 
@@ -14,16 +15,39 @@ export default function ProductPage({ params }) {
   const { getProductById } = useProducts();
   const product = getProductById(resolvedParams.id);
   const { addToCart } = useCart();
-  const [selectedSize, setSelectedSize] = useState(product?.size || "M");
+  const { addToast } = useToast();
+  const [selectedSize, setSelectedSize] = useState("");
+  const [selectedVariant, setSelectedVariant] = useState(null);
+
+  // Effect to update size if product changes
+  useEffect(() => {
+    if (product && product.variants?.length > 0) {
+        setSelectedSize(product.variants[0].size);
+    }
+  }, [product]);
+
+  useEffect(() => {
+      if (product && selectedSize) {
+          const variant = product.variants?.find(v => v.size === selectedSize);
+          setSelectedVariant(variant);
+      }
+  }, [product, selectedSize]);
 
   if (!product) {
     return notFound();
   }
 
-  // Effect to update size if product changes
-  useEffect(() => {
-    setSelectedSize(product.size);
-  }, [product]);
+  const handleAddToCart = () => {
+      if (!selectedVariant || selectedVariant.stock < 1) {
+          addToast("Produto indisponível neste tamanho.", "error");
+          return;
+      }
+      addToCart({ 
+          ...product, 
+          size: selectedSize,
+      });
+      addToast("Produto adicionado ao carrinho!");
+  };
 
   return (
     <div className={styles.page}>
@@ -46,13 +70,15 @@ export default function ProductPage({ params }) {
             <div className={styles.options}>
                 <label className={styles.label}>Tamanho</label>
                 <div className={styles.sizeSelector}>
-                    {["P", "M", "G", "GG"].map(size => (
+                    {product.variants?.map(v => (
                         <button 
-                            key={size}
-                            className={`${styles.sizeBtn} ${selectedSize === size ? styles.active : ''}`}
-                            onClick={() => setSelectedSize(size)}
+                            key={v.id}
+                            className={`${styles.sizeBtn} ${selectedSize === v.size ? styles.active : ''} ${v.stock === 0 ? styles.disabled : ''}`}
+                            onClick={() => v.stock > 0 && setSelectedSize(v.size)}
+                            disabled={v.stock === 0}
+                            title={v.stock === 0 ? "Indisponível" : `${v.stock} unidades disponíveis`}
                         >
-                            {size}
+                            {v.size}
                         </button>
                     ))}
                 </div>
@@ -60,17 +86,16 @@ export default function ProductPage({ params }) {
 
             <button 
                 className={styles.addToCartBtn}
-                onClick={() => {
-                    addToCart({ ...product, size: selectedSize });
-                    alert("Produto adicionado ao carrinho!");
-                }}
+                onClick={handleAddToCart}
+                disabled={!selectedVariant || selectedVariant.stock === 0}
+                style={{ opacity: (!selectedVariant || selectedVariant.stock === 0) ? 0.5 : 1 }}
             >
-                Adicionar ao Carrinho
+                {(!selectedVariant || selectedVariant.stock === 0) ? "Esgotado neste tamanho" : "Adicionar ao Carrinho"}
             </button>
             
             <div className={styles.meta}>
                 <p>Categoria: {product.category}</p>
-                <p>Estoque: Disponível</p>
+                <p>Estoque: {selectedVariant ? `${selectedVariant.stock} un.` : 'Selecione um tamanho'}</p>
             </div>
           </div>
         </div>

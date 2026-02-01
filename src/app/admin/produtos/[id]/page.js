@@ -5,7 +5,6 @@ import { useRouter } from "next/navigation";
 import { useProducts } from "@/context/ProductContext";
 import styles from "../../page.module.css"; 
 
-// Need to match exactly the path structure. If the path is /admin/produtos/[id], then this file should be page.js inside that folder.
 export default function EditProduct({ params }) {
   const resolvedParams = use(params);
   const { getProductById, updateProduct } = useProducts();
@@ -15,10 +14,9 @@ export default function EditProduct({ params }) {
     name: "",
     price: "",
     category: "Camisetas",
-    size: "M",
     image: "",
     featured: false,
-    stock: 0
+    variants: [] // Array of { size, stock }
   });
 
   const [loading, setLoading] = useState(true);
@@ -28,24 +26,23 @@ export default function EditProduct({ params }) {
     if (product) {
         setFormData({
             ...product,
-            price: product.price, // Keep as number, input handles it or convert
+            price: product.price,
+            variants: product.variants || [] // Ensure variants exist
         });
         setLoading(false);
-    } else {
-        // If not found (or context not loaded yet), wait or redirect
-        // In a real app we might fetch. Here context loads from localstorage.
-        // If still not found after a bit, maybe redirect.
-        if (typeof window !== 'undefined' && localStorage.getItem("daMataProducts")) {
-             // If data exists but product not found, it's invalid ID
-        }
     }
   }, [resolvedParams.id, getProductById]);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    updateProduct(parseInt(resolvedParams.id), {
+    setLoading(true);
+    await updateProduct(parseInt(resolvedParams.id), {
         ...formData,
-        price: parseFloat(formData.price)
+        price: parseFloat(formData.price),
+        variants: formData.variants.map(v => ({
+            ...v, 
+            stock: parseInt(v.stock) 
+        }))
     });
     router.push("/admin/produtos");
   };
@@ -58,26 +55,49 @@ export default function EditProduct({ params }) {
     }));
   };
 
+  const handleVariantChange = (index, field, value) => {
+      const newVariants = [...formData.variants];
+      newVariants[index][field] = value;
+      setFormData(prev => ({ ...prev, variants: newVariants }));
+  };
+
+  const addVariant = () => {
+      setFormData(prev => ({
+          ...prev,
+          variants: [...prev.variants, { size: "M", stock: 0 }]
+      }));
+  };
+
+  const removeVariant = (index) => {
+      setFormData(prev => ({
+          ...prev,
+          variants: prev.variants.filter((_, i) => i !== index)
+      }));
+  };
+
   if (loading) return <div style={{padding: '2rem'}}>Carregando...</div>;
 
   return (
     <div>
       <h1 className={styles.title}>Editar Produto #{resolvedParams.id}</h1>
       
-      <div className={styles.recentOrders} style={{ maxWidth: '600px' }}>
+      <div className={styles.recentOrders} style={{ maxWidth: '800px' }}>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-            <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Nome do Produto</label>
-                <input 
-                    type="text" 
-                    name="name"
-                    value={formData.name}
-                    onChange={handleChange}
-                    required
-                    style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #ccc' }}
-                />
+            {/* Basic Info */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1rem' }}>
+                <div>
+                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Nome do Produto</label>
+                    <input 
+                        type="text" 
+                        name="name"
+                        value={formData.name}
+                        onChange={handleChange}
+                        required
+                        style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #ccc' }}
+                    />
+                </div>
             </div>
-            
+
             <div style={{ display: 'flex', gap: '1rem' }}>
                 <div style={{ flex: 1 }}>
                     <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Preço (R$)</label>
@@ -91,23 +111,6 @@ export default function EditProduct({ params }) {
                         style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #ccc' }}
                     />
                 </div>
-                <div style={{ flex: 1 }}>
-                    <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Tamanho</label>
-                    <select 
-                        name="size"
-                        value={formData.size}
-                        onChange={handleChange}
-                        style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #ccc' }}
-                    >
-                        <option value="P">P</option>
-                        <option value="M">M</option>
-                        <option value="G">G</option>
-                        <option value="GG">GG</option>
-                    </select>
-                </div>
-            </div>
-
-            <div style={{ display: 'flex', gap: '1rem' }}>
                 <div style={{ flex: 1 }}>
                     <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Categoria</label>
                     <select 
@@ -123,16 +126,53 @@ export default function EditProduct({ params }) {
                         <option value="Saias">Saias</option>
                     </select>
                 </div>
-                <div style={{ flex: 1 }}>
-                     <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Estoque</label>
-                     <input 
-                        type="number" 
-                        name="stock"
-                        value={formData.stock || 0}
-                        onChange={handleChange}
-                        style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #ccc' }}
-                    />
+            </div>
+
+            {/* Variants Section */}
+            <div style={{ border: '1px solid #eee', padding: '1rem', borderRadius: '8px', backgroundColor: '#fafafa' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
+                    <h3 style={{ margin: 0 }}>Estoque por Tamanho</h3>
+                    <button 
+                        type="button" 
+                        onClick={addVariant}
+                        style={{ backgroundColor: '#2E7D32', color: 'white', border: 'none', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer' }}
+                    >
+                        + Adicionar Tamanho
+                    </button>
                 </div>
+                
+                {formData.variants.length === 0 && <p style={{color: '#666', fontStyle: 'italic'}}>Nenhum tamanho adicionado.</p>}
+
+                {formData.variants.map((variant, index) => (
+                    <div key={index} style={{ display: 'flex', gap: '1rem', marginBottom: '0.5rem', alignItems: 'center' }}>
+                        <select 
+                            value={variant.size} 
+                            onChange={(e) => handleVariantChange(index, 'size', e.target.value)}
+                            style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc', minWidth: '80px' }}
+                        >
+                            <option value="PP">PP</option>
+                            <option value="P">P</option>
+                            <option value="M">M</option>
+                            <option value="G">G</option>
+                            <option value="GG">GG</option>
+                            <option value="XG">XG</option>
+                        </select>
+                        <input 
+                            type="number" 
+                            value={variant.stock} 
+                            onChange={(e) => handleVariantChange(index, 'stock', e.target.value)}
+                            placeholder="Estoque"
+                            style={{ padding: '0.5rem', borderRadius: '4px', border: '1px solid #ccc', width: '100px' }}
+                        />
+                        <button 
+                            type="button" 
+                            onClick={() => removeVariant(index)}
+                            style={{ color: '#D32F2F', background: 'none', border: 'none', cursor: 'pointer', fontWeight: 'bold' }}
+                        >
+                            Remover
+                        </button>
+                    </div>
+                ))}
             </div>
 
             <div>
@@ -159,6 +199,7 @@ export default function EditProduct({ params }) {
 
             <button 
                 type="submit" 
+                disabled={loading}
                 style={{ 
                     marginTop: '1rem',
                     backgroundColor: '#1565C0', 
@@ -170,7 +211,7 @@ export default function EditProduct({ params }) {
                     cursor: 'pointer'
                 }}
             >
-                Atualizar Produto
+                {loading ? "Salvando..." : "Salvar Alterações"}
             </button>
         </form>
       </div>

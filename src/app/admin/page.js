@@ -11,7 +11,7 @@ export default function AdminDashboard() {
     { title: "Vendas Totais", value: "R$ 12.450,00", color: "#2E7D32" },
     { title: "Pedidos Hoje", value: "15", color: "#1565C0" },
     { title: "Produtos Ativos", value: products.length, color: "#EF6C00" },
-    { title: "Estoque Baixo", value: "3", color: "#D32F2F" },
+    { title: "Estoque Baixo (Total < 5)", value: products.filter(p => p.stock < 5).length, color: "#D32F2F" },
   ];
 
   return (
