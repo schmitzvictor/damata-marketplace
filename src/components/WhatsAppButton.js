@@ -8,7 +8,7 @@ export default function WhatsAppButton() {
 
   if (!content?.whatsapp) return null;
 
-  const message = "Olá! Gostaria de saber mais sobre os produtos da Da Mata.";
+  const message = "Olá! Gostaria de saber mais sobre os produtos da Damata Grow.";
   const link = `https://wa.me/${content.whatsapp}?text=${encodeURIComponent(message)}`;
 
   return (

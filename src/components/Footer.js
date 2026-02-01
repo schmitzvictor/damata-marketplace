@@ -13,7 +13,7 @@ export default function Footer() {
             <div className={styles.section}>
                 <h3 className={styles.title}>Quem somos nós</h3>
                 <p>
-                    A Da Mata Artesanal nasceu do desejo de conectar moda e natureza. 
+                    A Damata Grow nasceu do desejo de conectar moda e natureza. 
                     Nossas peças são criações únicas, inspiradas na biodiversidade e 
                     produzidas com respeito ao meio ambiente.
                 </p>
@@ -31,16 +31,12 @@ export default function Footer() {
                             Instagram 📸
                         </a>
                     )}
-                    {content?.socials?.facebook && (
-                        <a href={content.socials.facebook} target="_blank" rel="noopener noreferrer" className={styles.socialLink}>
-                            Facebook 👥
-                        </a>
-                    )}
+
                 </div>
             </div>
         </div>
         <div className={styles.copyright}>
-            <p>&copy; {new Date().getFullYear()} Da Mata Artesanal. Todos os direitos reservados.</p>
+            <p>&copy; {new Date().getFullYear()} Damata Grow. Todos os direitos reservados.</p>
         </div>
       </div>
     </footer>

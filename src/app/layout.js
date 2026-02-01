@@ -16,7 +16,7 @@ const roboto = Roboto({
 });
 
 export const metadata = {
-  title: "Da Mata Artesanal",
+  title: "Damata Grow",
   description: "Moda artesanal com conexão natural.",
 };
 

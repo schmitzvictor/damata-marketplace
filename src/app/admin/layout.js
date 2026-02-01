@@ -24,7 +24,7 @@ export default function AdminLayout({ children }) {
   return (
     <div className={styles.adminLayout}>
       <aside className={styles.sidebar}>
-        <div className={styles.logo}>Da Mata Admin</div>
+        <div className={styles.logo}>Damata Grow Admin</div>
         <nav className={styles.nav}>
           <Link href="/admin" className={styles.navLink}>📊 Dashboard</Link>
           <Link href="/admin/produtos" className={styles.navLink}>📦 Produtos</Link>

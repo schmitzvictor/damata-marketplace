@@ -13,7 +13,7 @@ export default function Header() {
         <div className={styles.navWrapper}>
           <Link href="/" className={styles.logo}>
             <span className={styles.mushroomIcon}>🍄</span>
-            Da Mata Artesanal
+            Damata Grow
           </Link>
           
           <nav className={styles.nav}>

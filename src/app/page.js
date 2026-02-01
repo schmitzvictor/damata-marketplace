@@ -17,7 +17,7 @@ export default function Home() {
       <main className={styles.main}>
         <section className={styles.hero}>
           <div className="container">
-            <h1 className={styles.title}>Da Mata Artesanal</h1>
+            <h1 className={styles.title}>Damata Grow</h1>
             <p className={styles.subtitle}>
               Roupas feitas com a alma da natureza. Estilo, conforto e consciência ambiental em cada peça.
             </p>
