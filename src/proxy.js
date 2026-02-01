@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 
-export function middleware(request) {
+export function proxy(request) {
   const adminSession = request.cookies.get('admin_session');
   const pathname = request.nextUrl.pathname;
 

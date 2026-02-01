@@ -31,7 +31,6 @@ export default function Footer() {
                             Instagram 📸
                         </a>
                     )}
-
                 </div>
             </div>
         </div>
