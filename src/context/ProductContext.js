@@ -8,21 +8,21 @@ export function ProductProvider({ children }) {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const fetchProducts = async () => {
-    try {
-        const res = await fetch('/api/products');
-        if (res.ok) {
-            const data = await res.json();
-            setProducts(data);
-        }
-    } catch (err) {
-        console.error("Failed to load products", err);
-    } finally {
-        setLoading(false);
-    }
-  };
-
   useEffect(() => {
+    const fetchProducts = async () => {
+        try {
+            const res = await fetch('/api/products');
+            if (res.ok) {
+                const data = await res.json();
+                setProducts(data);
+            }
+        } catch (err) {
+            console.error("Failed to load products", err);
+        } finally {
+            setLoading(false);
+        }
+    };
+    
     fetchProducts();
   }, []);
 

@@ -7,19 +7,19 @@ const ContentContext = createContext();
 export function ContentProvider({ children }) {
   const [content, setContent] = useState({});
 
-  const fetchContent = async () => {
-    try {
-        const res = await fetch('/api/settings');
-        if (res.ok) {
-            const data = await res.json();
-            // Data is { aboutUsTitle: "...", ... }
-            setContent(data);
-        }
-    } catch (e) { console.error(e); }
-  };
-
   useEffect(() => {
-      fetchContent();
+    const fetchContent = async () => {
+        try {
+            const res = await fetch('/api/settings');
+            if (res.ok) {
+                const data = await res.json();
+                // Data is { aboutUsTitle: "...", ... }
+                setContent(data);
+            }
+        } catch (e) { console.error(e); }
+    };
+
+    fetchContent();
   }, []);
 
   const updateContent = async (newContent) => {

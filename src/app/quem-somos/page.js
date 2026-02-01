@@ -8,6 +8,18 @@ import styles from "./page.module.css";
 export default function AboutUs() {
   const { content } = useContent();
 
+  if (!content || !content.aboutUsText) {
+      return (
+          <div className={styles.page}>
+              <Header />
+              <main className="container">
+                  <p style={{textAlign: 'center', marginTop: '4rem'}}>Carregando...</p>
+              </main>
+              <Footer />
+          </div>
+      );
+  }
+
   return (
     <div className={styles.page}>
       <Header />

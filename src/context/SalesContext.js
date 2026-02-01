@@ -7,17 +7,17 @@ const SalesContext = createContext();
 export function SalesProvider({ children }) {
   const [orders, setOrders] = useState([]);
 
-  const fetchOrders = async () => {
-      try {
-          const res = await fetch('/api/orders');
-          if (res.ok) {
-              const data = await res.json();
-              setOrders(data);
-          }
-      } catch (e) { console.error(e); }
-  };
-
   useEffect(() => {
+      const fetchOrders = async () => {
+          try {
+              const res = await fetch('/api/orders');
+              if (res.ok) {
+                  const data = await res.json();
+                  setOrders(data);
+              }
+          } catch (e) { console.error(e); }
+      };
+      
       fetchOrders();
   }, []);
 
