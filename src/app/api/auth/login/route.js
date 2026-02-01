@@ -4,9 +4,11 @@ export async function POST(request) {
   try {
     const { username, password } = await request.json();
 
-    // Verify credentials (Mock for now, but server-side).
-    // In production, these should be env vars or DB lookups.
-    if (username === "admin" && password === "da-mata") {
+    // Verify credentials from Environment Variables
+    const validUser = process.env.ADMIN_USER || "admin";
+    const validPass = process.env.ADMIN_PASSWORD;
+
+    if (validPass && username === validUser && password === validPass) {
       
       const response = NextResponse.json({ success: true });
       
