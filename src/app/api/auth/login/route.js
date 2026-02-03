@@ -5,10 +5,10 @@ export async function POST(request) {
     const { username, password } = await request.json();
 
     // Verify credentials from Environment Variables
-    const validUser = process.env.ADMIN_USER || "admin";
+    const validUser = process.env.ADMIN_USER;
     const validPass = process.env.ADMIN_PASSWORD;
 
-    if (validPass && username === validUser && password === validPass) {
+    if (validUser && validPass && username === validUser && password === validPass) {
       
       const response = NextResponse.json({ success: true });
       
@@ -18,6 +18,7 @@ export async function POST(request) {
         value: 'authenticated', // In real app, use a JWT or session ID
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
         path: '/',
         maxAge: 60 * 60 * 24 * 7, // 7 days
       });

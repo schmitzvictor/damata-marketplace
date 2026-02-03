@@ -1,8 +1,14 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
-export async function GET() {
+export async function GET(request) {
   try {
+    // Audit: Double-check auth (Middleware handles this, but good for defense-in-depth)
+    const adminSession = request.cookies.get('admin_session');
+    if (!adminSession) {
+        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    }
+
     const orders = await prisma.order.findMany({
         orderBy: { date: 'desc' }
     });

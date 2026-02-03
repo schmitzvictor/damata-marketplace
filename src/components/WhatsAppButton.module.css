@@ -24,3 +24,11 @@
 .icon {
   font-size: 1.75rem;
 }
+@media (max-width: 768px) {
+  .whatsappBtn {
+    bottom: 1rem;
+    right: 1rem;
+    width: 3rem;
+    height: 3rem;
+  }
+}

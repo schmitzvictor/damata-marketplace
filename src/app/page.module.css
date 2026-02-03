@@ -57,3 +57,18 @@
   gap: 2rem;
   padding: 1rem 0;
 }
+@media (max-width: 768px) {
+  .hero {
+    padding: 3rem 1rem;
+    border-radius: 0 0 2rem 2rem;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .grid {
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Smaller cards on mobile */
+    gap: 1rem;
+  }
+}
