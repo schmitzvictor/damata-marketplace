@@ -55,6 +55,17 @@ export default function EditProduct({ params }) {
     }));
   };
 
+  const handleImageUpload = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+              setFormData(prev => ({ ...prev, image: reader.result }));
+          };
+          reader.readAsDataURL(file);
+      }
+  };
+
   const handleVariantChange = (index, field, value) => {
       const newVariants = [...formData.variants];
       newVariants[index][field] = value;
@@ -176,12 +187,38 @@ export default function EditProduct({ params }) {
             </div>
 
             <div>
-                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>URL da Imagem</label>
+                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600' }}>Imagem do Produto</label>
+                
+                {/* Image Preview */}
+                {formData.image && (
+                    <div style={{ marginBottom: '1rem', border: '1px solid #ddd', padding: '0.5rem', borderRadius: '4px', width: 'fit-content' }}>
+                        <img 
+                            src={formData.image} 
+                            alt="Preview" 
+                            style={{ maxWidth: '200px', maxHeight: '200px', objectFit: 'contain' }} 
+                        />
+                    </div>
+                )}
+
+                {/* File Upload */}
+                <div style={{ marginBottom: '0.5rem' }}>
+                    <label style={{ fontSize: '0.9rem', color: '#666', display: 'block', marginBottom: '0.25rem' }}>Upload do Arquivo (Substitui URL)</label>
+                    <input 
+                        type="file" 
+                        accept="image/*"
+                        onChange={handleImageUpload}
+                        style={{ width: '100%', padding: '0.5rem', border: '1px solid #ccc', borderRadius: '4px' }}
+                    />
+                </div>
+
+                {/* URL Fallback */}
+                <label style={{ fontSize: '0.9rem', color: '#666', display: 'block', marginBottom: '0.25rem' }}>Ou cole a URL da imagem</label>
                 <input 
                     type="text" 
                     name="image"
                     value={formData.image}
                     onChange={handleChange}
+                    placeholder="https://exemplo.com/imagem.jpg"
                     style={{ width: '100%', padding: '0.75rem', borderRadius: '4px', border: '1px solid #ccc' }}
                 />
             </div>
