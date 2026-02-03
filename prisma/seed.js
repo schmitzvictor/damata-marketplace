@@ -1,4 +1,5 @@
 const { PrismaClient } = require('@prisma/client');
+const bcrypt = require('bcryptjs');
 const prisma = new PrismaClient();
 
 const initialProducts = [
@@ -161,6 +162,19 @@ async function main() {
   for (const setting of initialSettings) {
     await prisma.setting.create({ data: setting });
   }
+
+  // Create initial admin user
+  await prisma.user.deleteMany(); // Clear existing users
+  const hashedPassword = await bcrypt.hash('admin123', 10);
+  await prisma.user.create({
+    data: {
+      email: 'admin@damata.com',
+      password: hashedPassword,
+      name: 'Administrador',
+      role: 'admin'
+    }
+  });
+  console.log('Admin user created: admin@damata.com / admin123');
 
   console.log('Seeding finished.');
 }

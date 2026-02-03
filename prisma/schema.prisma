@@ -74,3 +74,14 @@ model Setting {
   key   String @id
   value String // Will store JSON stringified data
 }
+
+model User {
+  id            Int       @id @default(autoincrement())
+  email         String    @unique
+  password      String    // bcrypt hash
+  name          String
+  role          String    @default("user") // "admin" or "user"
+  loginAttempts Int       @default(0)
+  lockedUntil   DateTime?
+  createdAt     DateTime  @default(now())
+}

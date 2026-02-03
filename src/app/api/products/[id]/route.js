@@ -21,15 +21,12 @@ export async function PUT(request, { params }) {
         });
 
         // 2. Handle Variants: Delete all old ones, create new ones
-        console.log("Deleting variants for product", id);
         await tx.productVariant.deleteMany({
             where: { productId: parseInt(id) }
         });
 
         if (data.variants && data.variants.length > 0) {
-            console.log("Creating variants:", data.variants);
-            // SQLite sometimes struggles with createMany in specific versions or contexts, 
-            // using Promise.all for robustness.
+            // Using Promise.all for robustness across different DB providers.
             await Promise.all(
                 data.variants.map(v => 
                     tx.productVariant.create({
@@ -59,8 +56,8 @@ export async function PUT(request, { params }) {
 
     return NextResponse.json(product);
   } catch (error) {
-    console.error(error);
-    return NextResponse.json({ error: 'Error updating product', details: error.message }, { status: 500 });
+    console.error("Update Product Error:", error); // Log for debugging on server only
+    return NextResponse.json({ error: 'Error updating product' }, { status: 500 });
   }
 }
 
@@ -72,7 +69,7 @@ export async function DELETE(request, { params }) {
     });
     return NextResponse.json({ success: true });
   } catch (error) {
-    console.error("Delete Error", error);
-    return NextResponse.json({ error: 'Error deleting product', details: error.message, code: error.code }, { status: 500 });
+    console.error("Delete Product Error:", error);
+    return NextResponse.json({ error: 'Error deleting product' }, { status: 500 });
   }
 }

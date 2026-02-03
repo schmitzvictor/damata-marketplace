@@ -40,7 +40,7 @@ export async function POST(request) {
     });
     return NextResponse.json(product);
   } catch (error) {
-    console.error("Create Product Error", error);
-    return NextResponse.json({ error: 'Error creating product', details: error.message }, { status: 500 });
+    console.error("Create Product Error:", error);
+    return NextResponse.json({ error: 'Error creating product' }, { status: 500 });
   }
 }

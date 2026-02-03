@@ -30,6 +30,7 @@ export default function AdminLayout({ children }) {
           <Link href="/admin/produtos" className={styles.navLink}>📦 Produtos</Link>
           <Link href="/admin/blog" className={styles.navLink}>📝 Blog</Link>
           <Link href="/admin/vendas" className={styles.navLink}>💰 Vendas</Link>
+          <Link href="/admin/usuarios" className={styles.navLink}>👥 Usuários</Link>
           <Link href="/admin/configuracoes" className={styles.navLink}>⚙️ Configurações</Link>
           <button 
                 onClick={handleLogout} 
