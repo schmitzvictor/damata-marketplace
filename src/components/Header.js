@@ -4,14 +4,40 @@ import Link from 'next/link';
 import styles from './Header.module.css';
 import { useCart } from '@/context/CartContext';
 import { useTheme } from '@/context/ThemeContext';
-import { useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
+import { useState, useRef, useEffect } from 'react';
 import AuthModal from './AuthModal';
 
 export default function Header() {
   const { cartCount } = useCart();
   const { theme, toggleTheme } = useTheme();
+  const { user, logout, loading } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
-  
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const userMenuRef = useRef(null);
+
+  // Close menu when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setShowUserMenu(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleLogout = async () => {
+    await logout();
+    setShowUserMenu(false);
+  };
+
+  const getFirstName = (name) => {
+    if (!name) return 'Usuário';
+    return name.split(' ')[0];
+  };
+
   return (
     <>
       <header className={styles.header}>
@@ -40,13 +66,65 @@ export default function Header() {
                 </span>
               </button>
 
-              <button 
-                onClick={() => setShowAuthModal(true)} 
-                className="icon-btn"
-                title="Entrar / Cadastrar"
-              >
-                <span className="material-symbols-outlined">person</span>
-              </button>
+              {!loading && (
+                user ? (
+                  <div className={styles.userMenuWrapper} ref={userMenuRef}>
+                    <button 
+                      onClick={() => setShowUserMenu(!showUserMenu)}
+                      className={styles.userBtn}
+                      title="Menu do usuário"
+                    >
+                      <span className="material-symbols-outlined">person</span>
+                      <span className={styles.userName}>Olá, {getFirstName(user.name)}</span>
+                    </button>
+
+                    {showUserMenu && (
+                      <div className={styles.userMenu}>
+                        <div className={styles.userMenuHeader}>
+                          <span className="material-symbols-outlined">account_circle</span>
+                          <div>
+                            <p className={styles.userMenuName}>{user.name}</p>
+                            <p className={styles.userMenuEmail}>{user.email}</p>
+                          </div>
+                        </div>
+                        <div className={styles.userMenuDivider} />
+                        <Link 
+                          href="/minha-conta" 
+                          className={styles.userMenuItem}
+                          onClick={() => setShowUserMenu(false)}
+                        >
+                          <span className="material-symbols-outlined">settings</span>
+                          Minha Conta
+                        </Link>
+                        <Link 
+                          href="/meus-pedidos" 
+                          className={styles.userMenuItem}
+                          onClick={() => setShowUserMenu(false)}
+                        >
+                          <span className="material-symbols-outlined">shopping_bag</span>
+                          Meus Pedidos
+                        </Link>
+                        <div className={styles.userMenuDivider} />
+                        <button 
+                          onClick={handleLogout}
+                          className={styles.userMenuItem}
+                        >
+                          <span className="material-symbols-outlined">logout</span>
+                          Sair
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                ) : (
+                  <button 
+                    onClick={() => setShowAuthModal(true)} 
+                    className="icon-btn"
+                    title="Entrar / Cadastrar"
+                  >
+                    <span className="material-symbols-outlined">person</span>
+                  </button>
+                )
+              )}
 
               <Link href="/carrinho" className={styles.cartBtn}>
                 <span className="material-symbols-outlined">shopping_cart</span>

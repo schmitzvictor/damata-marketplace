@@ -7,6 +7,7 @@ import { ContentProvider } from "@/context/ContentContext";
 import { SalesProvider } from "@/context/SalesContext";
 import { ToastProvider } from "@/context/ToastContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { AuthProvider } from "@/context/AuthContext";
 import WhatsAppButton from "@/components/WhatsAppButton";
 
 const roboto = Roboto({
@@ -42,28 +43,30 @@ export default function RootLayout({ children }) {
           rel="stylesheet" 
         />
         <link 
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=account_circle,add,chat,check_circle,close,dark_mode,dashboard,delete,eco,edit,group,home,inventory_2,light_mode,lock,lock_open,login,logout,payments,person,search,settings,shopping_cart,verified_user" 
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=account_circle,add,chat,check_circle,close,dark_mode,dashboard,delete,eco,edit,group,home,inventory_2,light_mode,lock,lock_open,login,logout,payments,person,search,settings,shopping_bag,shopping_cart,verified_user" 
           rel="stylesheet" 
         />
       </head>
       <body className={`${roboto.variable} ${inter.variable}`}>
         <ThemeProvider>
-          <ContentProvider>
-            <ToastProvider>
-              <BlogProvider>
-                <SalesProvider>
-                  <ProductProvider>
-                    <CartProvider>
-                      {children}
-                      <WhatsAppButton />
-                      <Analytics />
-                      <SpeedInsights />
-                    </CartProvider>
-                  </ProductProvider>
-                </SalesProvider>
-              </BlogProvider>
-            </ToastProvider>
-          </ContentProvider>
+          <AuthProvider>
+            <ContentProvider>
+              <ToastProvider>
+                <BlogProvider>
+                  <SalesProvider>
+                    <ProductProvider>
+                      <CartProvider>
+                        {children}
+                        <WhatsAppButton />
+                        <Analytics />
+                        <SpeedInsights />
+                      </CartProvider>
+                    </ProductProvider>
+                  </SalesProvider>
+                </BlogProvider>
+              </ToastProvider>
+            </ContentProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

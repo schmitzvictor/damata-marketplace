@@ -1,10 +1,12 @@
 "use client";
 
 import { useState } from 'react';
+import { useAuth } from '@/context/AuthContext';
 import styles from './AuthModal.module.css';
 
 export default function AuthModal({ onClose }) {
-  const [mode, setMode] = useState('login'); // 'login' or 'register'
+  const { login, register } = useAuth();
+  const [mode, setMode] = useState('login');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
@@ -30,7 +32,6 @@ export default function AuthModal({ onClose }) {
     setLoading(true);
 
     if (mode === 'register') {
-      // Validate passwords match
       if (formData.password !== formData.confirmPassword) {
         setError('As senhas não coincidem');
         setLoading(false);
@@ -43,53 +44,29 @@ export default function AuthModal({ onClose }) {
         return;
       }
 
-      try {
-        const res = await fetch('/api/users/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            name: `${formData.firstName} ${formData.lastName}`.trim(),
-            email: formData.email,
-            password: formData.password
-          })
-        });
+      const result = await register(
+        `${formData.firstName} ${formData.lastName}`.trim(),
+        formData.email,
+        formData.password
+      );
 
-        const data = await res.json();
-
-        if (res.ok) {
-          setSuccess('Conta criada com sucesso! Faça login para continuar.');
-          setMode('login');
-          setFormData(prev => ({ ...prev, password: '', confirmPassword: '' }));
-        } else {
-          setError(data.error || 'Erro ao criar conta');
-        }
-      } catch (err) {
-        setError('Erro de conexão');
+      if (result.success) {
+        setSuccess('Conta criada com sucesso! Faça login para continuar.');
+        setMode('login');
+        setFormData(prev => ({ ...prev, password: '', confirmPassword: '' }));
+      } else {
+        setError(result.error || 'Erro ao criar conta');
       }
     } else {
-      try {
-        const res = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email: formData.email,
-            password: formData.password
-          })
-        });
+      const result = await login(formData.email, formData.password);
 
-        const data = await res.json();
-
-        if (res.ok) {
-          setSuccess('Login realizado com sucesso!');
-          setTimeout(() => {
-            onClose();
-            window.location.reload();
-          }, 1000);
-        } else {
-          setError(data.error || 'Erro ao fazer login');
-        }
-      } catch (err) {
-        setError('Erro de conexão');
+      if (result.success) {
+        setSuccess('Login realizado com sucesso!');
+        setTimeout(() => {
+          onClose();
+        }, 500);
+      } else {
+        setError(result.error || 'Erro ao fazer login');
       }
     }
 
