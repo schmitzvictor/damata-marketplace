@@ -1,6 +1,7 @@
 "use client";
 
 import { useContent } from "@/context/ContentContext";
+import { FaWhatsapp } from "react-icons/fa";
 import styles from "./WhatsAppButton.module.css";
 
 export default function WhatsAppButton() {
@@ -13,7 +14,7 @@ export default function WhatsAppButton() {
 
   return (
     <a href={link} target="_blank" rel="noopener noreferrer" className={styles.whatsappBtn} title="Fale conosco no WhatsApp">
-      <span className={styles.icon}>💬</span>
+      <FaWhatsapp className={styles.icon} />
     </a>
   );
 }

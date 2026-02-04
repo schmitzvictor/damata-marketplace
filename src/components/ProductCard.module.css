@@ -1,9 +1,9 @@
 .card {
-  background: white;
+  background: var(--bg-card);
   border-radius: var(--radius-lg);
   overflow: hidden;
   box-shadow: var(--shadow-sm);
-  transition: transform 0.2s, box-shadow 0.2s;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
   border: 1px solid var(--border-color);
   display: flex;
   flex-direction: column;
@@ -17,7 +17,7 @@
 .imageWrapper {
   width: 100%;
   aspect-ratio: 4/5;
-  background-color: #f0f0f0;
+  background-color: var(--border-color);
   overflow: hidden;
   position: relative;
 }

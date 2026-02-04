@@ -23,6 +23,8 @@
 
 .icon {
   font-size: 1.75rem;
+  width: 1.75rem;
+  height: 1.75rem;
 }
 @media (max-width: 768px) {
   .whatsappBtn {

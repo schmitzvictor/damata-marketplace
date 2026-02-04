@@ -20,7 +20,7 @@
   width: 250px;
   flex-shrink: 0;
   padding: 1.5rem;
-  background: white;
+  background: var(--bg-card);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border-color);
   height: fit-content;
@@ -43,7 +43,8 @@
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   font-family: inherit;
-  color: var(--text-secondary);
+  color: var(--text-primary);
+  background: var(--bg-white);
 }
 
 .range {

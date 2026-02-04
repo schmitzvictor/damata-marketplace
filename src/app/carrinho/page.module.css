@@ -47,13 +47,13 @@
   padding: 1rem;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-lg);
-  background: white;
+  background: var(--bg-card);
 }
 
 .imageWrapper {
   width: 80px;
   height: 100px;
-  background-color: #f0f0f0;
+  background-color: var(--border-color);
   border-radius: var(--radius-md);
   overflow: hidden;
   flex-shrink: 0;
@@ -101,10 +101,11 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: white;
+    background: var(--bg-white);
     border: 1px solid var(--border-color);
     border-radius: var(--radius-sm);
     font-weight: bold;
+    color: var(--text-primary);
 }
 
 .qty {
@@ -132,7 +133,7 @@
 }
 
 .summary {
-    background: white;
+    background: var(--bg-card);
     padding: 1.5rem;
     border-radius: var(--radius-lg);
     border: 1px solid var(--border-color);
