@@ -18,6 +18,7 @@
 }
 
 .paragraph {
+  font-family: var(--font-family-display);
   margin-bottom: 1.5rem;
   font-size: 1.125rem;
   line-height: 1.8;

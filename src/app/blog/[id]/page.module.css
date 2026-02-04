@@ -44,6 +44,7 @@
 }
 
 .content {
+  font-family: var(--font-family-display);
   font-size: 1.125rem;
   line-height: 1.8;
   color: var(--text-primary);

@@ -19,6 +19,7 @@
 }
 
 .subtitle {
+  font-family: var(--font-family-display);
   font-size: 1.25rem;
   opacity: 0.9;
   max-width: 600px;

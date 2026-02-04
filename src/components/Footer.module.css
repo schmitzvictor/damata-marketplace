@@ -1,53 +1,73 @@
 .footer {
   background-color: var(--primary-green-dark);
   color: white;
-  padding: 4rem 0 2rem;
+  padding: 2rem 0 1rem;
   margin-top: auto;
+  font-family: var(--font-family-display), sans-serif;
+  font-size: 14px;
 }
 
 .content {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 3rem;
-  margin-bottom: 3rem;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
   text-align: left;
 }
 
 .title {
-  font-size: 1.25rem;
+  font-size: 1rem;
   font-weight: 700;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
   color: var(--primary-green-light);
 }
 
 .section p {
-  line-height: 1.6;
+  line-height: 1.5;
   opacity: 0.9;
+  font-size: 0.9rem;
 }
 
 .socials {
-    display: flex;
-    flex-direction: column;
-    gap: 0.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
 }
 
 .socialLink {
-    color: white;
-    text-decoration: none;
-    transition: color 0.2s;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
+  color: white;
+  text-decoration: none;
+  transition: color 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.9rem;
 }
 
 .socialLink:hover {
-    color: var(--primary-green-light);
+  color: var(--primary-green-light);
 }
 
 .copyright {
   border-top: 1px solid rgba(255, 255, 255, 0.1);
-  padding-top: 2rem;
+  padding-top: 1rem;
   text-align: center;
-  font-size: 0.875rem;
+  font-size: 0.8rem;
   opacity: 0.7;
+}
+
+@media (max-width: 768px) {
+  .footer {
+    padding: 1.5rem 0 1rem;
+  }
+
+  .content {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .socials {
+    align-items: center;
+  }
 }

@@ -37,7 +37,7 @@ export default function AdminUsers() {
       });
 
       if (res.ok) {
-        fetchUsers(); // Refresh list
+        fetchUsers();
       }
     } catch (error) {
       console.error("Error unlocking user:", error);
@@ -72,16 +72,10 @@ export default function AdminUsers() {
         <h1 className={styles.title}>Gerenciar Usuários</h1>
         <Link 
           href="/admin/usuarios/novo"
-          style={{
-            background: '#2E7D32',
-            color: 'white',
-            padding: '0.75rem 1.5rem',
-            borderRadius: '0.5rem',
-            fontWeight: '600',
-            textDecoration: 'none'
-          }}
+          className="btn btn-primary"
         >
-          + Novo Usuário
+          <span className="material-symbols-outlined">add</span>
+          Novo Usuário
         </Link>
       </div>
 
@@ -105,56 +99,59 @@ export default function AdminUsers() {
                 <td>{user.email}</td>
                 <td>
                   <span style={{
-                    background: user.role === 'admin' ? '#e3f2fd' : '#f5f5f5',
-                    color: user.role === 'admin' ? '#1565c0' : '#666',
+                    background: user.role === 'admin' ? '#e3f2fd' : 'var(--bg-light)',
+                    color: user.role === 'admin' ? '#1565c0' : 'var(--text-secondary)',
                     padding: '0.25rem 0.75rem',
                     borderRadius: '1rem',
                     fontSize: '0.85rem',
-                    fontWeight: '600'
+                    fontWeight: '600',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '0.25rem'
                   }}>
-                    {user.role === 'admin' ? '👑 Admin' : '👤 Usuário'}
+                    <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>
+                      {user.role === 'admin' ? 'verified_user' : 'person'}
+                    </span>
+                    {user.role === 'admin' ? 'Admin' : 'Usuário'}
                   </span>
                 </td>
                 <td>
                   {isLocked(user) ? (
-                    <span style={{ color: '#d32f2f', fontWeight: '600' }}>🔒 Bloqueado</span>
+                    <span style={{ color: '#d32f2f', fontWeight: '600', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>lock</span>
+                      Bloqueado
+                    </span>
                   ) : (
-                    <span style={{ color: '#2e7d32' }}>✅ Ativo</span>
+                    <span style={{ color: '#2e7d32', display: 'inline-flex', alignItems: 'center', gap: '0.25rem' }}>
+                      <span className="material-symbols-outlined" style={{ fontSize: '1rem' }}>check_circle</span>
+                      Ativo
+                    </span>
                   )}
                 </td>
                 <td>
                   <div style={{ display: 'flex', gap: '0.5rem' }}>
                     <Link 
                       href={`/admin/usuarios/${user.id}`}
-                      style={{ color: '#1565c0', textDecoration: 'none' }}
+                      className="icon-btn"
+                      title="Editar"
                     >
-                      ✏️ Editar
+                      <span className="material-symbols-outlined" style={{ color: '#1565c0' }}>edit</span>
                     </Link>
                     {isLocked(user) && (
                       <button
                         onClick={() => handleUnlock(user.id)}
-                        style={{
-                          background: 'none',
-                          border: 'none',
-                          color: '#ff9800',
-                          cursor: 'pointer',
-                          padding: 0
-                        }}
+                        className="icon-btn"
+                        title="Desbloquear"
                       >
-                        🔓 Desbloquear
+                        <span className="material-symbols-outlined" style={{ color: '#ff9800' }}>lock_open</span>
                       </button>
                     )}
                     <button
                       onClick={() => handleDelete(user.id)}
-                      style={{
-                        background: 'none',
-                        border: 'none',
-                        color: '#d32f2f',
-                        cursor: 'pointer',
-                        padding: 0
-                      }}
+                      className="icon-btn"
+                      title="Deletar"
                     >
-                      🗑️ Deletar
+                      <span className="material-symbols-outlined" style={{ color: '#d32f2f' }}>delete</span>
                     </button>
                   </div>
                 </td>
@@ -164,8 +161,8 @@ export default function AdminUsers() {
         </table>
 
         {users.length === 0 && (
-          <p style={{ textAlign: 'center', padding: '2rem', color: '#666' }}>
-            Nenhum usuário cadastrado. Clique em "+ Novo Usuário" para criar.
+          <p style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-secondary)' }}>
+            Nenhum usuário cadastrado. Clique em "Novo Usuário" para criar.
           </p>
         )}
       </div>

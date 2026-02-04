@@ -1,6 +1,6 @@
 .title {
   margin-bottom: 2rem;
-  color: #333;
+  color: var(--text-primary);
 }
 
 .statsGrid {
@@ -11,16 +11,17 @@
 }
 
 .statCard {
-  background: white;
+  background: var(--bg-card);
   padding: 1.5rem;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
   border-top: 4px solid #ccc;
+  transition: background-color 0.3s;
 }
 
 .statTitle {
   font-size: 0.875rem;
-  color: #666;
+  color: var(--text-secondary);
   margin-bottom: 0.5rem;
 }
 
@@ -30,27 +31,45 @@
 }
 
 .recentOrders {
-  background: white;
+  background: var(--bg-card);
   padding: 1.5rem;
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-sm);
+  transition: background-color 0.3s;
 }
 
-.table {
+.table, .ordersTable {
   width: 100%;
   border-collapse: collapse;
   margin-top: 1rem;
 }
 
-.table th, .table td {
+.table th, .table td,
+.ordersTable th, .ordersTable td {
   text-align: left;
   padding: 1rem;
-  border-bottom: 1px solid #eee;
+  border-bottom: 1px solid var(--border-color);
 }
 
-.table th {
-  color: #666;
+.table th, .ordersTable th {
+  color: var(--text-secondary);
   font-weight: 600;
+}
+
+.input, .select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  background: var(--bg-white);
+  color: var(--text-primary);
+  transition: border-color 0.2s;
+}
+
+.input:focus, .select:focus {
+  outline: none;
+  border-color: var(--primary-green);
 }
 
 .badgeSuccess {
@@ -69,4 +88,21 @@
   border-radius: var(--radius-full);
   font-size: 0.75rem;
   font-weight: 600;
+}
+
+@media (max-width: 768px) {
+  .statsGrid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .statCard {
+    padding: 1rem;
+  }
+
+  .table th, .table td,
+  .ordersTable th, .ordersTable td {
+    padding: 0.5rem;
+    font-size: 0.9rem;
+  }
 }
