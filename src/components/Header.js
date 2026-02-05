@@ -5,6 +5,7 @@ import styles from './Header.module.css';
 import { useCart } from '@/context/CartContext';
 import { useTheme } from '@/context/ThemeContext';
 import { useAuth } from '@/context/AuthContext';
+import { useProducts } from '@/context/ProductContext';
 import { useState, useRef, useEffect } from 'react';
 import AuthModal from './AuthModal';
 
@@ -12,15 +13,24 @@ export default function Header() {
   const { cartCount } = useCart();
   const { theme, toggleTheme } = useTheme();
   const { user, logout, loading } = useAuth();
+  const { products } = useProducts();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
+  const [activeDropdown, setActiveDropdown] = useState(null);
   const userMenuRef = useRef(null);
+  const navRef = useRef(null);
 
-  // Close menu when clicking outside
+  // Get unique categories
+  const categories = [...new Set(products.map(p => p.category).filter(Boolean))];
+
+  // Close menus when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
         setShowUserMenu(false);
+      }
+      if (navRef.current && !navRef.current.contains(event.target)) {
+        setActiveDropdown(null);
       }
     };
 
@@ -38,6 +48,14 @@ export default function Header() {
     return name.split(' ')[0];
   };
 
+  const handleDropdownEnter = (menu) => {
+    setActiveDropdown(menu);
+  };
+
+  const handleDropdownLeave = () => {
+    setActiveDropdown(null);
+  };
+
   return (
     <>
       <header className={styles.header}>
@@ -48,10 +66,47 @@ export default function Header() {
               Damata Grow
             </Link>
             
-            <nav className={styles.nav}>
+            <nav className={styles.nav} ref={navRef}>
               <Link href="/" className={styles.navLink}>Início</Link>
+              
+              {/* Products Mega Menu */}
+              <div 
+                className={styles.navDropdown}
+                onMouseEnter={() => handleDropdownEnter('produtos')}
+                onMouseLeave={handleDropdownLeave}
+              >
+                <Link href="/produtos" className={styles.navLink}>
+                  Produtos
+                  <span className="material-symbols-outlined">expand_more</span>
+                </Link>
+                {activeDropdown === 'produtos' && (
+                  <div className={styles.megaMenu}>
+                    <div className={styles.megaMenuContent}>
+                      <div className={styles.megaMenuColumn}>
+                        <h4>Categorias</h4>
+                        <Link href="/produtos" onClick={handleDropdownLeave}>Ver Todos</Link>
+                        {categories.map(cat => (
+                          <Link 
+                            key={cat} 
+                            href={`/produtos?categoria=${encodeURIComponent(cat)}`}
+                            onClick={handleDropdownLeave}
+                          >
+                            {cat}
+                          </Link>
+                        ))}
+                      </div>
+                      <div className={styles.megaMenuColumn}>
+                        <h4>Destaques</h4>
+                        <Link href="/produtos?destaque=true" onClick={handleDropdownLeave}>Mais Vendidos</Link>
+                        <Link href="/produtos?ordem=recentes" onClick={handleDropdownLeave}>Lançamentos</Link>
+                        <Link href="/produtos?ordem=preco-baixo" onClick={handleDropdownLeave}>Menores Preços</Link>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
               <Link href="/quem-somos" className={styles.navLink}>Quem Somos</Link>
-              <Link href="/produtos" className={styles.navLink}>Produtos</Link>
               <Link href="/blog" className={styles.navLink}>Blog</Link>
             </nav>
 
@@ -128,7 +183,7 @@ export default function Header() {
 
               <Link href="/carrinho" className={styles.cartBtn}>
                 <span className="material-symbols-outlined">shopping_cart</span>
-                <span className={styles.cartCount}>{cartCount}</span>
+                {cartCount > 0 && <span className={styles.cartCount}>{cartCount}</span>}
               </Link>
             </div>
           </div>

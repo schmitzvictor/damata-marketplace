@@ -1,75 +1,208 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
 .main {
-  padding-bottom: 3rem;
+  flex: 1;
 }
 
+/* Hero Section */
 .hero {
-  background-color: var(--primary-green); /* Fallback */
   background: linear-gradient(135deg, var(--primary-green) 0%, var(--primary-green-dark) 100%);
-  color: white;
-  padding: 4rem 1rem;
+  padding: 5rem 2rem;
   text-align: center;
-  border-radius: 0 0 50% 50% / 4rem;
-  margin-bottom: 3rem;
+  color: white;
 }
 
-.title {
-  font-size: 3rem;
+.heroContent {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.heroTitle {
+  font-size: 3.5rem;
   font-weight: 800;
   margin-bottom: 1rem;
+  letter-spacing: -0.02em;
 }
 
-.subtitle {
+.heroSubtitle {
   font-family: var(--font-family-display);
   font-size: 1.25rem;
   opacity: 0.9;
-  max-width: 600px;
-  margin: 0 auto 2rem;
+  margin-bottom: 2rem;
+  line-height: 1.6;
 }
 
-.ctaButtons {
+.heroButtons {
   display: flex;
   gap: 1rem;
   justify-content: center;
+  flex-wrap: wrap;
 }
 
 .heroBtn {
-  background-color: white;
+  background: white;
   color: var(--primary-green);
-  padding: 0.75rem 2rem;
+  padding: 1rem 2.5rem;
   border-radius: var(--radius-full);
   font-weight: 700;
-  transition: transform 0.2s;
+  font-size: 1rem;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .heroBtn:hover {
   transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+.heroBtnOutline {
+  background: transparent;
+  color: white;
+  border: 2px solid white;
+  padding: 1rem 2.5rem;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  font-size: 1rem;
+  transition: all 0.2s;
+}
+
+.heroBtnOutline:hover {
+  background: white;
+  color: var(--primary-green);
+}
+
+/* Sections */
+.section {
+  padding: 4rem 0;
+  background: var(--bg-light);
+}
+
+.section:nth-child(odd) {
+  background: var(--bg-white);
+}
+
+.sectionHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
 }
 
 .sectionTitle {
-  text-align: center;
-  margin-bottom: 2rem;
-  color: var(--primary-green-dark);
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--text-primary);
 }
 
-.grid {
+.viewAll {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--primary-green);
+  font-weight: 600;
+  font-size: 0.9rem;
+  transition: gap 0.2s;
+}
+
+.viewAll:hover {
+  gap: 0.75rem;
+}
+
+.viewAll .material-symbols-outlined {
+  font-size: 1.25rem;
+  color: var(--primary-green);
+}
+
+/* Product Grid */
+.productGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 2rem;
-  padding: 1rem 0;
+  gap: 1.5rem;
 }
+
+/* CTA Banner */
+.ctaBanner {
+  background: linear-gradient(135deg, var(--primary-green-dark) 0%, var(--primary-green) 100%);
+  padding: 5rem 2rem;
+  text-align: center;
+  color: white;
+}
+
+.ctaContent h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.ctaContent p {
+  font-family: var(--font-family-display);
+  font-size: 1.1rem;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+}
+
+.ctaBtn {
+  display: inline-block;
+  background: white;
+  color: var(--primary-green);
+  padding: 1rem 2.5rem;
+  border-radius: var(--radius-full);
+  font-weight: 700;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.ctaBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* Responsive */
 @media (max-width: 768px) {
   .hero {
     padding: 3rem 1rem;
-    border-radius: 0 0 2rem 2rem;
   }
 
-  .title {
-    font-size: 2rem;
+  .heroTitle {
+    font-size: 2.5rem;
   }
 
-  .grid {
-    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); /* Smaller cards on mobile */
+  .heroSubtitle {
+    font-size: 1rem;
+  }
+
+  .section {
+    padding: 3rem 0;
+  }
+
+  .sectionHeader {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+
+  .sectionTitle {
+    font-size: 1.5rem;
+  }
+
+  .productGrid {
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
+  }
+
+  .ctaBanner {
+    padding: 3rem 1rem;
+  }
+
+  .ctaContent h2 {
+    font-size: 1.75rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .productGrid {
+    grid-template-columns: 1fr;
   }
 }

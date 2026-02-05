@@ -29,16 +29,78 @@
 
 .nav {
   display: flex;
-  gap: 2rem;
+  gap: 0.5rem;
+  align-items: center;
 }
 
 .navLink {
   color: var(--text-secondary);
   font-weight: 500;
-  transition: color 0.2s;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-md);
+  transition: all 0.2s;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 .navLink:hover {
+  color: var(--primary-green);
+  background-color: var(--bg-light);
+}
+
+.navLink .material-symbols-outlined {
+  font-size: 1.25rem;
+  transition: transform 0.2s;
+}
+
+/* Dropdown */
+.navDropdown {
+  position: relative;
+}
+
+.navDropdown:hover .navLink .material-symbols-outlined {
+  transform: rotate(180deg);
+}
+
+.megaMenu {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lg);
+  padding: 1.5rem;
+  min-width: 400px;
+  z-index: 200;
+}
+
+.megaMenuContent {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+.megaMenuColumn h4 {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin-bottom: 0.75rem;
+  font-weight: 600;
+}
+
+.megaMenuColumn a {
+  display: block;
+  padding: 0.5rem 0;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.megaMenuColumn a:hover {
   color: var(--primary-green);
 }
 
@@ -171,19 +233,39 @@
   font-size: 1.25rem;
   color: var(--text-secondary);
 }
+
 @media (max-width: 768px) {
   .navWrapper {
-    flex-direction: column;
+    flex-wrap: wrap;
     gap: 1rem;
   }
 
   .nav {
-    flex-wrap: wrap;
+    order: 3;
+    width: 100%;
     justify-content: center;
-    gap: 1rem;
+    flex-wrap: wrap;
+    gap: 0.25rem;
   }
 
-  .logo {
-    margin-bottom: 0.5rem;
+  .navLink {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.9rem;
+  }
+
+  .megaMenu {
+    position: fixed;
+    left: 1rem;
+    right: 1rem;
+    transform: none;
+    min-width: auto;
+  }
+
+  .userName {
+    display: none;
+  }
+
+  .userBtn {
+    padding: 0.5rem;
   }
 }
