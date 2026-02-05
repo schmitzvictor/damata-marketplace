@@ -5,10 +5,12 @@ import Footer from "@/components/Footer";
 import styles from "./page.module.css";
 import Link from "next/link";
 import { useProducts } from "@/context/ProductContext";
+import { useContent } from "@/context/ContentContext";
 import ProductCard from "@/components/ProductCard";
 
 export default function Home() {
   const { products, getFeaturedProducts } = useProducts();
+  const { content } = useContent();
   const featuredProducts = getFeaturedProducts();
 
   // Group products by category
@@ -21,6 +23,12 @@ export default function Home() {
   // Get unique categories
   const categories = [...new Set(products.map(p => p.category).filter(Boolean))];
 
+  // Dynamic content with defaults
+  const heroTitle = content?.heroTitle || "Damata Grow";
+  const heroSubtitle = content?.heroSubtitle || "Roupas feitas com a alma da natureza. Estilo, conforto e consciência ambiental em cada peça.";
+  const ctaTitle = content?.ctaTitle || "Conecte-se com a Natureza";
+  const ctaSubtitle = content?.ctaSubtitle || "Peças exclusivas, feitas à mão com materiais sustentáveis";
+
   return (
     <div className={styles.page}>
       <Header />
@@ -29,10 +37,8 @@ export default function Home() {
         {/* Hero Section */}
         <section className={styles.hero}>
           <div className={styles.heroContent}>
-            <h1 className={styles.heroTitle}>Damata Grow</h1>
-            <p className={styles.heroSubtitle}>
-              Roupas feitas com a alma da natureza. Estilo, conforto e consciência ambiental em cada peça.
-            </p>
+            <h1 className={styles.heroTitle}>{heroTitle}</h1>
+            <p className={styles.heroSubtitle}>{heroSubtitle}</p>
             <div className={styles.heroButtons}>
               <Link href="/produtos" className={styles.heroBtn}>
                 Ver Coleção
@@ -91,8 +97,8 @@ export default function Home() {
         <section className={styles.ctaBanner}>
           <div className="container">
             <div className={styles.ctaContent}>
-              <h2>Conecte-se com a Natureza</h2>
-              <p>Peças exclusivas, feitas à mão com materiais sustentáveis</p>
+              <h2>{ctaTitle}</h2>
+              <p>{ctaSubtitle}</p>
               <Link href="/produtos" className={styles.ctaBtn}>
                 Explorar Produtos
               </Link>

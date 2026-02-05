@@ -46,6 +46,10 @@ export default function AdminLayout({ children }) {
             <span className="material-symbols-outlined">group</span>
             Usuários
           </Link>
+          <Link href="/admin/paginas" className={styles.navLink}>
+            <span className="material-symbols-outlined">edit</span>
+            Páginas
+          </Link>
           <Link href="/admin/configuracoes" className={styles.navLink}>
             <span className="material-symbols-outlined">settings</span>
             Configurações

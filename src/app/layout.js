@@ -43,7 +43,7 @@ export default function RootLayout({ children }) {
           rel="stylesheet" 
         />
         <link 
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=account_circle,add,arrow_forward,chat,check_circle,close,dark_mode,dashboard,delete,eco,edit,expand_more,group,home,inventory_2,light_mode,lock,lock_open,login,logout,payments,person,search,settings,shopping_bag,shopping_cart,verified_user" 
+          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&icon_names=account_circle,add,arrow_forward,chat,check_circle,close,dark_mode,dashboard,delete,eco,edit,expand_more,group,home,inventory_2,light_mode,location_on,lock,lock_open,login,logout,mail,payments,person,phone,search,settings,shopping_bag,shopping_cart,verified_user" 
           rel="stylesheet" 
         />
       </head>
